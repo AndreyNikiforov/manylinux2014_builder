@@ -30,3 +30,5 @@ RUN yum update -y \
 RUN cd Python-${PYTHON_VERSION} \
  && ./configure --enable-optimizations --with-lto \
  && make altinstall
+
+ RUN python3 --version
