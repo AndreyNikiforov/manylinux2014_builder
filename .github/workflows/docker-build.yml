@@ -26,12 +26,6 @@ jobs:
           install: true
           buildkitd-flags: --debug
 
-      - name: Builder instance name
-        run: echo ${{ steps.buildx.outputs.name }}
-
-      - name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
-
       - name: Build Release Docker
         uses: docker/build-push-action@v5
         with:
