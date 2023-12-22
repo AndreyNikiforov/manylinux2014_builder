@@ -8,7 +8,8 @@ FROM quay.io/pypa/manylinux2014_aarch64 as manylinux2014_arm64_
 FROM quay.io/pypa/manylinux2014_armv7l as manylinux2014_arm_v7
 
 # builder
-FROM manylinux2014_$TARGETARCH_$TARGETVARIANT
+FROM manylinux2014_$TARGETARCH_
+#$TARGETVARIANT
 
 ARG TARGETARCH
 ARG TARGETVARIANT
