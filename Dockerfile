@@ -1,17 +1,16 @@
-ARG TARGETARCH
+#ARG TARGETARCH
 #ARG TARGETVARIANT
 
 # aliases
-FROM quay.io/pypa/manylinux2014_x86_64 as manylinux2014_amd64
-FROM quay.io/pypa/manylinux2014_i686 as manylinux2014_386
-FROM quay.io/pypa/manylinux2014_aarch64 as manylinux2014_arm64
+FROM quay.io/pypa/manylinux2014_x86_64 as manylinux2014_amd64_
+FROM quay.io/pypa/manylinux2014_i686 as manylinux2014_386_
+FROM quay.io/pypa/manylinux2014_aarch64 as manylinux2014_arm64_
 FROM quay.io/pypa/manylinux2014_armv7l as manylinux2014_arm_v7
 
 # builder
-FROM manylinux2014_$TARGETARCH
-#_$TARGETVARIANT
+FROM manylinux2014_${TARGETARCH}_${TARGETVARIANT}
 
-ARG TARGETARCH
+#ARG TARGETARCH
 #ARG TARGETVARIANT
 
 ARG PYTHON_VERSION=3.12.1
