@@ -20,8 +20,8 @@ RUN echo "I am building for ${TARGETARCH}/${TARGETVARIANT}, Python ${PYTHON_VERS
 WORKDIR /python
 
 # https://stackoverflow.com/questions/65531567/on-centos-how-do-i-build-python-3-9-from-source-while-incorporating-my-openssl
-RUN yum update -y 
-RUN yum groupinstall "Development Tools" -y
+RUN yum update -y \
+ && yum groupinstall "Development Tools" -y
 RUN yum install openssl11-devel libffi-devel bzip2-devel xz-devel -y
 RUN yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel -y
 RUN curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
