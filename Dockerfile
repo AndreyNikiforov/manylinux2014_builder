@@ -2,13 +2,13 @@
 #ARG TARGETVARIANT
 
 # aliases
-FROM quay.io/pypa/manylinux2014_x86_64 as manylinux2014_amd64__e
-FROM quay.io/pypa/manylinux2014_i686 as manylinux2014_386__e
-FROM quay.io/pypa/manylinux2014_aarch64 as manylinux2014_arm64__e
+FROM quay.io/pypa/manylinux2014_x86_64 as manylinux2014_amd64_none
+FROM quay.io/pypa/manylinux2014_i686 as manylinux2014_386_none
+FROM quay.io/pypa/manylinux2014_aarch64 as manylinux2014_arm64_none
 # FROM quay.io/pypa/manylinux2014_armv7l as manylinux2014_arm_v7_e # missing image in the upstream
 
 # builder
-FROM manylinux2014_${TARGETARCH}_${TARGETVARIANT}_e
+FROM manylinux2014_${TARGETARCH}_${TARGETVARIANT:-none}
 
 ARG TARGETARCH
 ARG TARGETVARIANT
