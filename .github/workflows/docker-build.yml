@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_docker:
+  build:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
+        if: matrix.platform != 'linux/amd64' && matrix.platform != 'linux/386'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
@@ -40,3 +41,30 @@ jobs:
           push: false
           tags: |
             icloudpd/${{ matrix.policy }}_${{ matrix.platform }}:latest
+          outputs: type=docker,dest=/tmp/${{ matrix.policy }}_${{ matrix.platform }}.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: images
+          path: /tmp/${{ matrix.policy }}_${{ matrix.platform }}.tar
+
+  combine:
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: images
+          path: /tmp
+      - name: Load image
+        run: |
+          cat /tmp/*.tar | docker load
+          docker image ls -a
+      # - name: Create Manifest List
+      #   run: |
+      #     docker create manifest
+      # - name: Deploy
+      #   run: |
+      #     docker publish
