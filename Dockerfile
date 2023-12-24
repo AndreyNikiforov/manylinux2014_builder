@@ -28,7 +28,7 @@ RUN yum update -y \
  && tar -zxvf Python-${PYTHON_VERSION}.tgz
 
 RUN cd Python-${PYTHON_VERSION} \
- && ./configure --enable-optimizations --with-lto \
+ && ./configure --enable-optimizations --enable-shared --with-lto \
  && make altinstall
 
- RUN python3 --version
+RUN python3 --version
