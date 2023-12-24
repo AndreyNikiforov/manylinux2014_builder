@@ -16,14 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [linux/amd64 ,linux/arm64, linux/386, linux/arm/v7 ] #,linux/arm/v6
+        platform: [ "amd64" ,"arm64" , "386" ] #, "arm/v7",linux/arm/v6
         policy: [ "manylinux2014" ]
  
     steps:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        if: matrix.platform != 'linux/amd64' && matrix.platform != 'linux/386'
+        if: matrix.platform != 'amd64' && matrix.platform != '386'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.${{ matrix.policy }}
-          platforms: ${{ matrix.platform }} #linux/amd64 #,linux/arm64,linux/386 #,linux/arm/v7 #,linux/arm/v6
+          platforms: linux/${{ matrix.platform }} #linux/amd64 #,linux/arm64,linux/386 #,linux/arm/v7 #,linux/arm/v6
           push: false
           tags: |
             icloudpd/${{ matrix.policy }}_${{ matrix.platform }}:latest
@@ -51,6 +51,10 @@ jobs:
 
   combine:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        policy: [ "manylinux2014" ]
     needs: build
     steps:
       - name: Download artifact
@@ -60,11 +64,12 @@ jobs:
           path: /tmp
       - name: Load image
         run: |
-          cat /tmp/*.tar | docker load
+          cat /tmp/${{ matrix.policy }}_*.tar | docker load
           docker image ls -a
-      # - name: Create Manifest List
-      #   run: |
-      #     docker create manifest
+      - name: Create Manifest for ${{ matrix.policy }}
+        # todo create manifest from all files with the policy prefix
+        run: |
+          docker create manifest ${{ matrix.policy }} ${{ matrix.policy }}_amd64 ${{ matrix.policy }}_arm64
       # - name: Deploy
       #   run: |
-      #     docker publish
+      #     docker publish ${{ matrix.policy }}
