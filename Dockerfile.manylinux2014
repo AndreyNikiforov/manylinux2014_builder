@@ -37,6 +37,6 @@ RUN tar -zxvf Python-${PYTHON_VERSION}.tgz
 
 RUN cd Python-${PYTHON_VERSION} \
  && ./configure --enable-optimizations --enable-shared --with-lto \
- && make install
+ && make altinstall
 
 RUN python3 --version
